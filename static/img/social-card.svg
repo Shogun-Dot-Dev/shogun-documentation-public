@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#111827"/>
+  <path d="M0 520h1200v110H0z" fill="#0f766e"/>
+  <path d="M165 425 300 150l135 275h-90l-45 95-45-95h-90Z" fill="#f9fafb"/>
+  <path d="M242 355h116l-58-126-58 126Z" fill="#38bdf8"/>
+  <text x="515" y="285" fill="#f9fafb" font-family="Arial, sans-serif" font-size="68" font-weight="700">Shogun Public Documentation</text>
+  <text x="518" y="365" fill="#cbd5e1" font-family="Arial, sans-serif" font-size="34">Public registry for product, API, and operations docs.</text>
+</svg>
