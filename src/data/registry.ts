@@ -17,6 +17,18 @@ export type RegistryEntry = {
 
 export const registryEntries: RegistryEntry[] = [
   {
+    id: 'service-status',
+    title: 'Service Status and Incidents',
+    description: 'Service readiness monitoring, public status updates, and incident management operations.',
+    category: 'Operations',
+    audience: 'Service operators, administrators, developers',
+    status: 'Active',
+    owner: 'Shogun.dev',
+    url: '/docs/service-status',
+    updatedAt: '2026-09-07',
+    tags: ['status', 'health', 'incidents', 'monitoring'],
+  },
+  {
     id: 'public-docs-registry',
     title: 'Public Documentation Registry',
     description:

@@ -8,6 +8,7 @@ const sidebars: SidebarsConfig = {
       label: 'Registry',
       items: ['registry/overview', 'registry/schema', 'registry/lifecycle'],
     },
+    'service-status',
     'contributing',
   ],
 };
