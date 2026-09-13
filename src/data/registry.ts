@@ -25,7 +25,7 @@ export const registryEntries: RegistryEntry[] = [
     status: 'Active',
     owner: 'Shogun.dev',
     url: '/docs/service-status',
-    updatedAt: '2026-09-07',
+    updatedAt: '2026-09-13',
     tags: ['status', 'health', 'incidents', 'monitoring'],
   },
   {
