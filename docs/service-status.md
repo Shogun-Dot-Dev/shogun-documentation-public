@@ -29,8 +29,9 @@ Only the service identifier, status, and UTC check time are returned. Responses 
 | tapdeck | Tapdeck hosted website | Built homepage, updater signature, installer object HEAD |
 | scribepane | Scribepane custom Node server | Postgres, shutdown state, and Redis readiness/PING when configured |
 | washtrack | WashTrack API | Postgres SELECT 1 and Redis readiness/PING when configured |
+| quiet | Quiet website (`https://getquiet.co.za`) | Website and shared account availability when a protected readiness target is configured; on-device call handling is outside monitoring |
 
-Bucketly, Tapdeck and Scribepane also inherit shared-auth failures in the public summary. These are sampled readiness checks, not guarantees that every feature or third-party integration works. Individual desktop installations, users' storage providers, full end-to-end login/payment flows, and every static asset are outside these probes.
+Bucketly, Tapdeck, Scribepane and Quiet also inherit shared-auth failures in the public summary. These are sampled readiness checks, not guarantees that every feature or third-party integration works. Individual desktop installations, users' storage providers, full end-to-end login/payment flows, and every static asset are outside these probes.
 
 ## Configure and deploy
 
@@ -91,3 +92,13 @@ Incidents survive API restarts and are shared across API replicas through Postgr
 - HTTP 400 indicates invalid input, 401 an invalid session, 403 insufficient access, and 503 unavailable incident storage. Public readiness polling is independent of incident storage reads.
 
 `npm test` in the API runs the real migration and incident SQL against isolated [PGlite Postgres](https://pglite.dev/docs/), without a production database. Tests cover authorization, persistence, concurrent edits, resolution, validation, and public field selection. UI tests cover service assignment, manual status precedence, publishing, and conflict handling.
+
+## Quiet registration and rollout
+
+Quiet uses `quiet` in the status feed, incidents and history, and `quiet-hours` in shared-auth signup and subscription records. The public product URL is `https://getquiet.co.za`. The status page and incident workspace include Quiet with the other tools; unconfigured monitoring remains unknown.
+
+Apply the website API migration `migrations/20260915_quiet_tool.sql` before accepting Quiet bug reports or storing its incidents and history. It extends the existing product/component constraints while preserving legacy records; it is recorded in `migrations/meta/_journal.json`. Fresh installations use the updated `schema.sql`.
+
+Deploy shared auth first, apply the website API migration, then deploy the API before the website UI and public documentation. Update any independent monitor worker to the matching code. The public status, history and incident reads require `version=2` to include Quiet. Requests without that version retain the seven-component contract, omit Quiet history, and project mixed incidents onto legacy components (Quiet-only incidents are omitted). The new UI opts in on reads and writes. Direct callers assigning Quiet must use `POST /api/incidents?version=2` or `PATCH /api/incidents/:id?version=2`; Quiet assignments without that query parameter return HTTP 400. Legacy incident edits cannot silently remove a hidden Quiet assignment: they receive HTTP 409 and must reload the page.
+
+A future configured Quiet target must use the existing authenticated `/internal/status-health` contract and return `service: quiet`; use `https://getquiet.co.za/internal/status-health` or its private-network equivalent after that endpoint is available. Registration does not provision a target, set credentials, or assert that a successful check has occurred.
