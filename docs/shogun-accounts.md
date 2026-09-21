@@ -24,3 +24,15 @@ Quiet does not ask for your phone number when creating a Shogun Account and does
 Deleting the shared account affects access to every Shogun Dot Dev app and tool using it. Read the scope and data-retention explanation before requesting deletion. Quiet's flow emails a confirmation code and requires a final confirmation. Product-local files and settings are not automatically erased by deleting an account.
 
 For help, contact [contact@shogunn.dev](mailto:contact@shogunn.dev). Direct privacy or legal requests to [legal@shogunn.dev](mailto:legal@shogunn.dev).
+
+## Your Shogun ID
+
+Open [Shogun Account](https://shogunn.dev/account) to create or view your **Shogun ID**, an optional username shared across Shogun Dot Dev apps and tools. Sign in using your existing email/password or Google account; a separate account is not needed for each tool. You may need to sign in again when moving between tools or devices.
+
+After verifying your email, choose an available ID or select **Generate and create an ID**. IDs use 3 to 24 letters, numbers or underscores, start with a letter, and are case-insensitive. Official and staff names are reserved. A generated ID does not contain your name or email address. Once created, the ID stays attached to your account and cannot be changed in this release. You can continue without creating an ID.
+
+Your display name and sign-in email are separate from your Shogun ID. Continue signing in with email or Google. IDs do not grant subscriptions, staff access or access to another person's content, and there is no public account directory.
+
+## Consistent navigation and partnership branding
+
+Shogun tools use **Shogun Account** for account navigation and retain their own product links. Page titles use `Page | Product` without em dashes. Client services retain their own brand and authentication, with **In partnership with Shogun Dot Dev** in their footer. That credit does not mean a client's users share Shogun authentication.
