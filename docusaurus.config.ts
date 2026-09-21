@@ -76,7 +76,8 @@ const config: Config = {
           title: 'Shogun.dev',
           items: [
             {label: 'Website', href: 'https://shogunn.dev'},
-            {label: 'Status', href: 'https://railway.com'},
+            {label: 'Shogun Account', href: 'https://shogunn.dev/account'},
+            {label: 'Service status', href: 'https://shogunn.dev/status'},
           ],
         },
       ],
