@@ -7,6 +7,8 @@ title: Welcome
 
 This site is the public registry for Shogun.dev documentation. It gives customers, partners, and contributors one place to find canonical documentation for active public services.
 
+Learn how [Shogun Accounts](./shogun-accounts.md) work across Shogun Dot Dev apps and tools.
+
 ## What Belongs Here
 
 - Product and service documentation intended for public readers.
