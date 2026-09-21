@@ -17,6 +17,18 @@ export type RegistryEntry = {
 
 export const registryEntries: RegistryEntry[] = [
   {
+    id: 'shogun-accounts',
+    title: 'Shogun Accounts',
+    description: 'Shared sign-in, email verification, password recovery and account deletion across Shogun Dot Dev tools.',
+    category: 'Guide',
+    audience: 'Customers and tool users',
+    status: 'Active',
+    owner: 'Shogun Dot Dev',
+    url: '/docs/shogun-accounts',
+    updatedAt: '2026-09-21',
+    tags: ['accounts', 'sign-in', 'privacy', 'support'],
+  },
+  {
     id: 'service-status',
     title: 'Service Status and Incidents',
     description: 'Service readiness monitoring, public status updates, and incident management operations.',
