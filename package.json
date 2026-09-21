@@ -1,6 +1,6 @@
 {
   "name": "shogun-documentation-public",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "private": true,
   "description": "Public documentation registry for Shogun.dev projects and services.",
   "scripts": {
