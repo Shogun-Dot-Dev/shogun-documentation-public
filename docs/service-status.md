@@ -99,7 +99,9 @@ Incidents survive API restarts and are shared across API replicas through Postgr
 
 Quiet uses `quiet-hours` in shared-auth records and `quiet` in the monitoring API. Its website and hosted preview downloads are monitored; Google Play delivery and on-device call handling are not. Existing Quiet incidents and history remain intact and Quiet can be assigned to new incidents again.
 
-The UI continues requesting `version=2`. The existing Quiet schema constraints/migration remain unchanged; this change needs no new database migration. Deploy the Quiet protected endpoint through its development-to-main flow, configure a distinct server-only `STATUS_HEALTH_TOKEN`, then add a `quiet` entry to `STATUS_MONITOR_TARGETS` on the existing scheduler. These production configuration changes require explicit authorization. Quiet stays unknown until configured and verified.
+The UI continues requesting `version=2`. Direct API callers must also include `?version=2` on `/api/status`, `/api/status/history`, and `/api/incidents` reads to include Quiet. Incident `POST /api/incidents?version=2` and `PATCH /api/incidents/:id?version=2` requests must include this parameter when assigning Quiet; unversioned reads omit Quiet and unversioned assignments return HTTP 400.
+
+The existing Quiet schema constraints/migration remain unchanged; this change needs no new database migration. Deploy the Quiet protected endpoint through its development-to-main flow, configure a distinct server-only `STATUS_HEALTH_TOKEN`, then add a `quiet` entry to `STATUS_MONITOR_TARGETS` on the existing scheduler. These production configuration changes require explicit authorization. Quiet stays unknown until configured and verified.
 
 ## Safe feature impact
 
