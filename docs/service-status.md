@@ -28,8 +28,10 @@ Only the service identifier, status, UTC check time, and optional allowlisted `i
 | bucketly | Bucketly hosted website | Built homepage, fresh release catalogue, and HEAD checks of all latest advertised installers |
 | tapdeck | Tapdeck hosted website | Built homepage, updater signature, installer object HEAD |
 | scribepane | Scribepane custom Node server | Postgres, shutdown state, Redis readiness/PING when configured, and read-only image bucket access |
-| washtrack | WashTrack API | Postgres SELECT 1, Redis readiness/PING when configured, and read-only file bucket access |
+| washtrack | WashTrack API | Postgres SELECT 1 and Redis readiness/PING when configured; file bucket readiness is pending production deployment |
 | quiet | Quiet website | Built homepage, private Android preview manifest and APK size, and optional configured testing database |
+
+As of 23 October 2026, WashTrack's monitoring-only storage check is merged but has not been deployed to production. Its current production readiness result does not establish file-storage availability. Enable that coverage only after deploying and verifying the monitoring release.
 
 Bucketly, Tapdeck, Scribepane and Quiet also inherit shared-auth failures in the public summary. These are sampled readiness checks, not guarantees that every feature or third-party integration works. Individual desktop installations, users' storage providers, full end-to-end login/payment flows, and every static asset are outside these probes.
 
@@ -99,9 +101,9 @@ Incidents survive API restarts and are shared across API replicas through Postgr
 
 Quiet uses `quiet-hours` in shared-auth records and `quiet` in the monitoring API. Its website and hosted preview downloads are monitored; Google Play delivery and on-device call handling are not. Existing Quiet incidents and history remain intact and Quiet can be assigned to new incidents again.
 
-The UI continues requesting `version=2`. Direct API callers must also include `?version=2` on `/api/status`, `/api/status/history`, and `/api/incidents` reads to include Quiet. Incident `POST /api/incidents?version=2` and `PATCH /api/incidents/:id?version=2` requests must include this parameter when assigning Quiet; unversioned reads omit Quiet and unversioned assignments return HTTP 400.
+The UI continues requesting `version=2`. Direct API callers must also include `?version=2` on `/api/status`, `/api/status/history`, and `/api/incidents` reads to include Quiet. Incident `POST /api/incidents?version=2` and `PATCH /api/incidents/:id?version=2` requests must include this parameter when assigning Quiet; unversioned reads omit Quiet and unversioned assignments return HTTP 400. Legacy edits of incidents with a hidden Quiet assignment return HTTP 409 and must reload using the versioned contract.
 
-The existing Quiet schema constraints/migration remain unchanged; this change needs no new database migration. Deploy the Quiet protected endpoint through its development-to-main flow, configure a distinct server-only `STATUS_HEALTH_TOKEN`, then add a `quiet` entry to `STATUS_MONITOR_TARGETS` on the existing scheduler. These production configuration changes require explicit authorization. Quiet stays unknown until configured and verified.
+Quiet incident and history storage requires the existing website API migration `migrations/20260915_quiet_tool.sql`, recorded in `migrations/meta/_journal.json`; fresh installations use the updated `schema.sql`. Apply it through the approved database workflow before accepting Quiet bug reports or storing Quiet incidents/history. The feature-impact changes add no further migration. Deploy the Quiet protected endpoint through its development-to-main flow, configure a distinct server-only `STATUS_HEALTH_TOKEN`, then add a `quiet` entry to `STATUS_MONITOR_TARGETS` on the existing scheduler. These production configuration changes require explicit authorization. Quiet stays unknown until configured and verified.
 
 ## Safe feature impact
 
@@ -111,6 +113,6 @@ For example: "Hosted downloads are currently unavailable. Existing installations
 
 Bucketly checks every installer in the latest release using HEAD, a fixed HTTPS host allowlist and no redirects. It requires a fresh catalogue, without the website's stale-cache fallback, and does not increment download counters or retrieve file bytes. Tapdeck checks the built page, updater signature and installer object using existing bucket credentials. Quiet checks its restricted preview manifest and local APK size without exposing file metadata or bypassing download authorization. These probes do not test users' desktop installations or third-party buckets.
 
-Scribepane, WashTrack and the website API check bucket access using their application identity and read-only HEAD requests. Verify bucket-inspection permission (S3 ListBucket) before rollout. A 403 means access failed, not that files are missing. No probe lists user objects, reads user files, writes or deletes test objects, or proves that every upload/download operation works.
+Scribepane and the website API check bucket access using their application identity and read-only HEAD requests. WashTrack's pending monitoring release uses the same approach; its current production probe does not yet check bucket access. Verify bucket-inspection permission (S3 ListBucket) before rollout. A 403 means access failed, not that files are missing. No probe lists user objects, reads user files, writes or deletes test objects, or proves that every upload/download operation works.
 
 Deploy changed tool servers first, then the API and any independent monitor worker, then the UI and documentation. Old monitors remain compatible with extra health fields. Verify missing/wrong token rejection, redaction, download failures, auth recovery, expiry, and Quiet target registration. Do not weaken a failing probe to make the page green.
