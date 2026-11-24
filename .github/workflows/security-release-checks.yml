@@ -41,6 +41,7 @@ jobs:
         run: bun audit
       - run: npm run typecheck
       - run: npm run build
+      - run: npm run test:security
       - name: Verify dependency locks were not changed
         run: git diff --exit-code -- package.json package-lock.json bun.lock pnpm-lock.yaml src-tauri/Cargo.lock
       - name: Record resolved dependency tree
